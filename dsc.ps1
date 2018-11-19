@@ -1,27 +1,65 @@
+[DSCLocalConfigurationManager()]
 
+configuration LocalSettings
 
-configuration Tester
 {
     param 
+
     ( 
+       
+        [Parameter(Mandatory = $false)]
+
+        [int] $RefreshFrequencyMins,
+       
         [Parameter(Mandatory = $true)]
+
         [string] $AdminUsername
+
     );
-
-    Import-DscResource -ModuleName PSDesiredStateConfiguration,
-        @{ModuleName="xNetworking";ModuleVersion="5.5.0.0"},
-        @{ModuleName="xPSDesiredStateConfiguration";ModuleVersion="8.0.0.0"};
-
-    $backgroundColor = "184 40 50";
-
     node localhost
+
     {
-        File "tools"
+        Settings
         {
-            Ensure = "Present"
-            Type = "Directory"
-            DestinationPath = "C:\tools"
+            RefreshFrequencyMins = $RefreshFrequencyMins
         }
+
     }
 }
 
+configuration Tester
+
+{
+
+    param 
+
+    ( 
+
+        [Parameter(Mandatory = $false)]
+
+        [int] $RefreshFrequencyMins,
+       
+        [Parameter(Mandatory = $true)]
+
+        [string] $AdminUsername
+
+    );
+
+
+    node localhost
+
+    {
+
+        File "tools"
+        {
+
+            Ensure = "Present"
+
+            DestinationPath = "C:\tools.txt"
+
+            Contents = "$AdminUsername"
+        }
+
+    }
+
+}
