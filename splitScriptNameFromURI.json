@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "url": {
+            "type": "string",
+            "defaultValue": "https://someAcct.blob.core.windows.net/aContainer/scripts/myscript.ps1"
+        }
+    },
+    "variables": {
+        "delimiters": [ "//", "/" ],
+		"urlArray": "[split(parameters('url'),variables('delimiters'))]",
+		"urlWithoutScriptName": "[concat(variables('urlArray')[0], '//', variables('urlArray')[1], '/', variables('urlArray')[2] )]",
+		"script": "[replace(parameters('url'),variables('urlWithoutScriptName'), '.')]"
+
+    },
+    "resources": [],
+    "outputs": {
+        "urlArray": {
+            "type": "array",
+            "value": "[variables('urlArray')]"
+        },
+        "urlWithoutScriptName": {
+            "type": "string",
+            "value": "[variables('urlWithoutScriptName')]"
+        },
+        "script": {
+            "type": "string",
+            "value": "[variables('script')]"
+        }	
+    }
+}
